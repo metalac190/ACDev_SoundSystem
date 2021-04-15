@@ -1,0 +1,31 @@
+This asset bundle uses Singletons, Scriptable Objects, and Object Pooling to quickly and easily play sounds.
+Primary focus is on ease of use and separation of designer control. Ideally the Sound Designer can just set
+up SO assets and programmer can plug them in and tell them to play.
+Created by: Adam Chandler
+
+NOTE: This is meant for playing 1-shot sounds and Music Queues. Looping sounds will need more direct
+control of their lifecycle, so it's recommend that you use a different system for those.
+_____________________________________________________________________________
+Option 2 - Scriptable Objects
+--------------------------------------------------------------------------------------------------------
+Optionally, you can setup SoundEvent Data as an asset file, then just call the files through code.
+This is useful if you don't want the Sound Designer to mess with code, but they still want to tweak values
+--------------------------------------------------------------------------------------------------------
+1. Create a new SoundEvent Scriptable Object
+	(rightClick Project view, Create -> Audio -> SoundEvent)
+2. Configure the SoundEvent Scriptable Object Asset to the Sound Designer's needs
+3. Get a reference to the SoundEvent through script (Ex. [SerializeField] SoundEvent _soundToPlay)
+4. Get the Vector3 position of where you'd like to play the sound (Ex. transform.position is the position
+	of the gameObject on the current script)
+5. Call the PlayOneShot(Vector3) method on the sound event
+	soundEvent.PlayOneShot(positionToPlayAt)
+_____________________________________________________________________________
+Option 1 - Direct Control
+--------------------------------------------------------------------------------------------------------
+You can play a sound directly by calling it through the SoundManager singleton GameObject. 
+This is useful if you want to make simple, direct calls to play Sounds. Make sure to configure your audiosource
+appropriately so that it can just 'audiosource.Play()'
+
+1. Setup the AudioSource however you need to, either in prefab or in code
+2. SoundManager.Instance.PlayOneShot(audioSourceToPlay)
+_____________________________________________________________________________
