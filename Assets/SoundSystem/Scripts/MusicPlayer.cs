@@ -43,14 +43,17 @@ namespace SoundSystem
             if (musicEvent == null) return;
 
             _musicEvent = musicEvent;
-            for (int i = 0; i < _layerSources.Count; i++)
+            for (int i = 0; i < _layerSources.Count && i < musicEvent.MusicLayers.Length; i++)
             {
-                _layerSources[i].volume = 0;
-                _layerSources[i].clip = musicEvent.MusicLayers[i];
-                _layerSources[i].outputAudioMixerGroup = musicEvent.Mixer;
+                // if the music layers are properly filled out
+                if (musicEvent.MusicLayers[i] != null)
+                {
+                    _layerSources[i].volume = 0;
+                    _layerSources[i].clip = musicEvent.MusicLayers[i];
+                    _layerSources[i].outputAudioMixerGroup = musicEvent.Mixer;
 
-                if(musicEvent.MusicLayers[i] != null)
                     _layerSources[i].Play();
+                }  
             }
             
             FadeVolume(_musicManager.Volume, fadeTime);
@@ -73,36 +76,46 @@ namespace SoundSystem
             if (_fadeVolumeRoutine != null)
                 StopCoroutine(_fadeVolumeRoutine);
 
-            // if additive, lerp additively
-            if (_musicEvent.AdditiveLayers)
-            {
-                _fadeVolumeRoutine = StartCoroutine
-                    (LerpSourceAdditiveRoutine(targetVolume, fadeTime));
-            }
-            // otherwise lerp up only the active layer
-            else
+            // if single layer, lerp active layer
+            if (_musicEvent.LayerType == LayerType.Single)
             {
                 _fadeVolumeRoutine = StartCoroutine
                     (LerpSourcesSingleRoutine(targetVolume, fadeTime));
             }
+            // if additive, lerp additively
+            else if (_musicEvent.LayerType == LayerType.Additive)
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourceAdditiveRoutine(targetVolume, fadeTime));
+            }
+
         }
 
         private IEnumerator StopRoutine(float fadeTime)
         {
             _isStopping = true;
+            // cancel current running volume fades
+            if (_fadeVolumeRoutine != null)
+                StopCoroutine(_fadeVolumeRoutine);
+
             // start the fadeout
             // when done fading out, disable all sources
             // if additive, lerp additively
-            if (_musicEvent.AdditiveLayers)
+            // otherwise lerp up only the active layer
+            if (_musicEvent.LayerType == LayerType.Single)
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourcesSingleRoutine(0, fadeTime));
+            }
+
+            else if (_musicEvent.LayerType == LayerType.Additive)
             {
                 _fadeVolumeRoutine = StartCoroutine
                     (LerpSourceAdditiveRoutine(0, fadeTime));
             }
-            // otherwise lerp up only the active layer
             else
             {
-                _fadeVolumeRoutine = StartCoroutine
-                    (LerpSourcesSingleRoutine(0, fadeTime));
+                Debug.LogWarning("Layer type not implemented yet!");
             }
 
             // wait for volume fade to finish
@@ -161,7 +174,7 @@ namespace SoundSystem
                 yield return null;
             }
             // set final target just to make sure we hit the exact value
-
+            //TODO - should this be _layers.Count? instead of ActiveLayerIndex
             for (int i = 0; i <= _musicManager.ActiveLayerIndex; i++)
             {
                 if (i <= _musicManager.ActiveLayerIndex)

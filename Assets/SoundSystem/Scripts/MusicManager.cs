@@ -50,6 +50,8 @@ namespace SoundSystem
 
         void Awake()
         {
+            // specifically ensure we destroy excess MusicManagers,
+            // if we already have one
             if(_instance != null && _instance != this)
             {
                 Destroy(this.gameObject);

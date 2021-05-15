@@ -5,6 +5,12 @@ using UnityEngine.Audio;
 
 namespace SoundSystem
 {
+    public enum LayerType
+    {
+        Additive,
+        Single
+    }
+
     [CreateAssetMenu(menuName = "SoundSystem/Music Event", fileName = "MUS_")]
     public class MusicEvent : ScriptableObject
     {
@@ -12,11 +18,12 @@ namespace SoundSystem
         [SerializeField] AudioClip[] _musicLayers = null;
         [Tooltip("If true, layers will be added together, " +
             "otherwise each layer will player independently")]
-        [SerializeField] bool _additiveLayers = true;
+
+        [SerializeField] LayerType _layerType = LayerType.Additive;
         [SerializeField] AudioMixerGroup _mixer;
 
         public AudioClip[] MusicLayers => _musicLayers;
-        public bool AdditiveLayers => _additiveLayers;
+        public LayerType LayerType => _layerType;
         public AudioMixerGroup Mixer => _mixer;
 
         // add STEM support later

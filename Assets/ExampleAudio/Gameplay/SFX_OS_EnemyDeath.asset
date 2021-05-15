@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9f54e29ada10f4eb324eb547417a3b, type: 3}
+  m_Name: SFX_OS_EnemyDeath
+  m_EditorClassIdentifier: 
+  _possibleClips:
+  - {fileID: 8300000, guid: cd5ed44ce09770744b457c10e7834774, type: 3}
+  - {fileID: 8300000, guid: 69ce4743eb80f1c4f97a4caa57be3212, type: 3}
+  - {fileID: 8300000, guid: e7d14fa4c6c9a3d4d9df1b541de2714b, type: 3}
+  _mixer: {fileID: 0}
+  _priority: 128
+  _volume:
+    MinValue: 0.41832063
+    MaxValue: 0.8817885
+  _pitch:
+    MinValue: 0.95
+    MaxValue: 1.05
+  _stereoPan: 0
+  _spatialBlend: 0
+  _attenuationMin: 1
+  _attenuationMax: 500
